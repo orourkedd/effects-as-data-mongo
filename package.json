@@ -9,8 +9,8 @@
   },
   "scripts": {
     "test": "jest",
-    "precommit": "standard; npm run transpile && npm test && uver && git add -A",
-    "deploy": "standard && npm run transpile && npm test",
+    "precommit": "standard; npm test && uver && git add -A",
+    "deploy": "standard && npm test",
     "publish-please": "publish-please",
     "prepublish": "publish-please guard"
   },
