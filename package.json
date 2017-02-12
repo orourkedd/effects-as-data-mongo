@@ -1,7 +1,7 @@
 {
   "name": "effects-as-data-mongo",
   "version": "1.0.0",
-  "description": "Effects as data for mongo",
+  "description": "Effects-as-data for mongo",
   "main": "src/index.js",
   "repository": {
     "type": "git",
