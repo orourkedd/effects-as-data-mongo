@@ -1,0 +1,40 @@
+{
+  "name": "effects-as-data-mongo",
+  "version": "1.0.0",
+  "description": "Effects as data for mongo",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orourkedd/effects-as-data-mongo"
+  },
+  "scripts": {
+    "test": "jest",
+    "precommit": "standard; npm run transpile && npm test && uver && git add -A",
+    "deploy": "standard && npm run transpile && npm test",
+    "publish-please": "publish-please",
+    "prepublish": "publish-please guard"
+  },
+  "author": "orourkedd",
+  "license": "MIT",
+  "dependencies": {
+    "effects-as-data": "^1.7.1",
+    "ramda": "^0.23.0",
+    "safe-errors": "^0.5.0"
+  },
+  "devDependencies": {
+    "husky": "^0.11.9",
+    "jest-cli": "^17.0.3",
+    "publish-please": "^2.2.0",
+    "sinon": "^1.17.7",
+    "standard": "^8.6.0",
+    "uver-cli": "^1.1.0"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "test",
+      "it",
+      "fail"
+    ]
+  }
+}
