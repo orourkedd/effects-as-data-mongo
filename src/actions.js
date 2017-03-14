@@ -26,12 +26,14 @@ function mongoFindOne (collection, query) {
   }
 }
 
-function mongoFind (collection, query) {
+function mongoFind (collection, query, options = {}) {
   return {
     type: 'mongo',
     fn: 'find',
     collection,
-    query
+    query,
+    page: options.page || 0,
+    limit: options.perPage || 25,
   }
 }
 

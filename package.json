@@ -1,6 +1,6 @@
 {
   "name": "effects-as-data-mongo",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "Effects-as-data for mongo",
   "main": "src/index.js",
   "repository": {
@@ -17,9 +17,10 @@
   "author": "orourkedd",
   "license": "MIT",
   "dependencies": {
-    "effects-as-data": "^1.7.1",
+    "effects-as-data": "^1.12.1",
     "ramda": "^0.23.0",
-    "safe-errors": "^0.5.0"
+    "safe-errors": "^0.5.0",
+    "simple-protocol-helpers": "^0.3.0"
   },
   "devDependencies": {
     "husky": "^0.11.9",

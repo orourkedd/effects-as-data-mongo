@@ -1,6 +1,6 @@
 const { curry } = require('ramda')
 const { safecb } = require('safe-errors')
-const { isFailure } = require('effects-as-data')
+const { isFailure, normalizeToSuccess } = require('simple-protocol-helpers');
 
 function mongoHandler (mongo, action) {
   let collection
@@ -21,10 +21,26 @@ function mongoHandler (mongo, action) {
       return safecb(collection.findOne, collection)(action.query)
 
     case 'find':
+      const limit = action.limit || 25;
+      const skip = (action.page || 0) * limit;
       collection = mongo.collection(action.collection)
-      return safecb(collection.find, collection)(action.query).then((r) => {
-        if (isFailure(r)) return r
-        return r.payload.toArray()
+
+      const resultsQuery = safecb(collection.find, collection)(action.query, {
+        limit,
+        skip
+      }).then((r) => r.payload.toArray())
+      .then(normalizeToSuccess)
+
+      const totalQuery = safecb(collection.count, collection)(action.query)
+
+      return Promise.all([resultsQuery, totalQuery])
+      .then(([results, total]) => {
+        if (isFailure(results)) return results
+        if (isFailure(total)) return total
+        return {
+          results: results.payload,
+          total: total.payload
+        }
       })
 
     default:
