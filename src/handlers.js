@@ -14,7 +14,7 @@ function mongoHandler (mongo, action) {
     case 'upsert':
       collection = mongo.collection(action.collection)
       update = safecb(collection.update, collection)
-      return update({ guid: action.doc.guid }, action.doc, { upsert: true, multi: false })
+      return update(action.query || { guid: action.doc.guid }, action.doc, { upsert: true, multi: false })
 
     case 'findOne':
       collection = mongo.collection(action.collection)

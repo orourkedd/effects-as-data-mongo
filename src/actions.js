@@ -7,12 +7,13 @@ function mongoInsert (collection, doc) {
   }
 }
 
-function mongoUpsert (collection, doc) {
+function mongoUpsert (collection, doc, query) {
   return {
     type: 'mongo',
     fn: 'upsert',
     collection,
-    doc
+    doc,
+    query
   }
 }
 
