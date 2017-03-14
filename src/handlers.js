@@ -1,6 +1,6 @@
 const { curry } = require('ramda')
 const { safecb } = require('safe-errors')
-const { isFailure, normalizeToSuccess } = require('simple-protocol-helpers');
+const { isFailure, normalizeToSuccess } = require('simple-protocol-helpers')
 
 function mongoHandler (mongo, action) {
   let collection
@@ -21,8 +21,8 @@ function mongoHandler (mongo, action) {
       return safecb(collection.findOne, collection)(action.query)
 
     case 'find':
-      const limit = action.limit || 25;
-      const skip = (action.page || 0) * limit;
+      const limit = action.limit || 25
+      const skip = (action.page || 0) * limit
       collection = mongo.collection(action.collection)
 
       const resultsQuery = safecb(collection.find, collection)(action.query, {

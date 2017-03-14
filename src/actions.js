@@ -33,7 +33,7 @@ function mongoFind (collection, query, options = {}) {
     collection,
     query,
     page: options.page || 0,
-    limit: options.perPage || 25,
+    limit: options.perPage || 25
   }
 }
 
