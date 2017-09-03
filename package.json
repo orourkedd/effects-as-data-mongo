@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "jest",
-    "deploy": "npm test && npm publish",
+    "deploy": "npm test && npm publish"
   },
   "author": "orourkedd",
   "license": "MIT",
