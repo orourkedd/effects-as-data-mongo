@@ -2,6 +2,11 @@ const { curry } = require('ramda');
 const { safecb } = require('safe-errors');
 const { isFailure, normalizeToSuccess } = require('simple-protocol-helpers');
 
+const unwrap = (r) => {
+  if (r.success) return r.payload
+  else throw r.error
+}
+
 function mongoHandler(mongo, action) {
   let collection;
   let update;
@@ -9,7 +14,7 @@ function mongoHandler(mongo, action) {
   switch (action.fn) {
     case 'insert':
       collection = mongo.collection(action.collection);
-      return safecb(collection.insert, collection)(action.doc);
+      return safecb(collection.insert, collection)(action.doc).then(unwrap)
 
     case 'upsert':
       collection = mongo.collection(action.collection);
@@ -17,11 +22,11 @@ function mongoHandler(mongo, action) {
       return update(action.query || { guid: action.doc.guid }, action.doc, {
         upsert: true,
         multi: false
-      });
+      }).then(unwrap)
 
     case 'findOne':
       collection = mongo.collection(action.collection);
-      return safecb(collection.findOne, collection)(action.query);
+      return safecb(collection.findOne, collection)(action.query).then(unwrap)
 
     case 'find':
       const limit = action.limit || 25;
@@ -51,7 +56,7 @@ function mongoHandler(mongo, action) {
 
     case 'dropCollection':
       collection = mongo.collection(action.collection);
-      return safecb(collection.drop, collection)();
+      return safecb(collection.drop, collection)().then(unwrap)
 
     default:
       return Promise.reject(
