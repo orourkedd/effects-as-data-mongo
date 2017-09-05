@@ -1,46 +1,46 @@
-const { curry } = require('ramda');
-const { safecb } = require('safe-errors');
-const { isFailure, normalizeToSuccess } = require('simple-protocol-helpers');
+const { curry } = require("ramda");
+const { safecb } = require("safe-errors");
+const { isFailure, normalizeToSuccess } = require("simple-protocol-helpers");
 
-const unwrap = (r) => {
-  if (r.success) return r.payload
-  else throw r.error
-}
+const unwrap = r => {
+  if (r.success) return r.payload;
+  else throw r.error;
+};
 
-function mongoHandler(mongo, action) {
+function mongoHandler(mongo, cmd) {
   let collection;
   let update;
 
-  switch (action.fn) {
-    case 'insert':
-      collection = mongo.collection(action.collection);
-      return safecb(collection.insert, collection)(action.doc).then(unwrap)
+  switch (cmd.fn) {
+    case "insert":
+      collection = mongo.collection(cmd.collection);
+      return safecb(collection.insert, collection)(cmd.doc).then(unwrap);
 
-    case 'upsert':
-      collection = mongo.collection(action.collection);
+    case "upsert":
+      collection = mongo.collection(cmd.collection);
       update = safecb(collection.update, collection);
-      return update(action.query || { guid: action.doc.guid }, action.doc, {
+      return update(cmd.query || { guid: cmd.doc.guid }, cmd.doc, {
         upsert: true,
         multi: false
-      }).then(unwrap)
+      }).then(unwrap);
 
-    case 'findOne':
-      collection = mongo.collection(action.collection);
-      return safecb(collection.findOne, collection)(action.query).then(unwrap)
+    case "findOne":
+      collection = mongo.collection(cmd.collection);
+      return safecb(collection.findOne, collection)(cmd.query).then(unwrap);
 
-    case 'find':
-      const limit = action.limit || 25;
-      const skip = (action.page || 0) * limit;
-      collection = mongo.collection(action.collection);
+    case "find":
+      const limit = cmd.limit || 25;
+      const skip = (cmd.page || 0) * limit;
+      collection = mongo.collection(cmd.collection);
 
-      const resultsQuery = safecb(collection.find, collection)(action.query, {
+      const resultsQuery = safecb(collection.find, collection)(cmd.query, {
         limit,
         skip
       })
         .then(r => r.payload.toArray())
         .then(normalizeToSuccess);
 
-      const totalQuery = safecb(collection.count, collection)(action.query);
+      const totalQuery = safecb(collection.count, collection)(cmd.query);
 
       return Promise.all([
         resultsQuery,
@@ -54,13 +54,13 @@ function mongoHandler(mongo, action) {
         };
       });
 
-    case 'dropCollection':
-      collection = mongo.collection(action.collection);
-      return safecb(collection.drop, collection)().then(unwrap)
+    case "dropCollection":
+      collection = mongo.collection(cmd.collection);
+      return safecb(collection.drop, collection)().then(unwrap);
 
     default:
       return Promise.reject(
-        `function "${action.fn}" not available for mongo handler.`
+        `function "${cmd.fn}" not available for mongo handler.`
       );
   }
 }
