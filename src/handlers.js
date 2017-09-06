@@ -38,7 +38,7 @@ function mongoHandler(mongo, cmd) {
         .then(r => r.payload.toArray())
         .then(normalizeToSuccess);
 
-      const totalQuery = safecb(collection.count, collection)(cmd.query));
+      const totalQuery = safecb(collection.count, collection)(cmd.query);
 
       return Promise.all([
         resultsQuery,
