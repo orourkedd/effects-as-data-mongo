@@ -29,18 +29,16 @@ function mongoHandler(mongo, cmd) {
       return safecb(collection.findOne, collection)(cmd.query).then(unwrap);
 
     case "find":
-      const limit = cmd.limit || 25;
-      const skip = (cmd.page || 0) * limit;
       collection = mongo.collection(cmd.collection);
 
-      const resultsQuery = safecb(collection.find, collection)(cmd.query, {
-        limit,
-        skip
-      })
+      const resultsQuery = safecb(collection.find, collection)(
+        cmd.query,
+        cmd.options
+      )
         .then(r => r.payload.toArray())
         .then(normalizeToSuccess);
 
-      const totalQuery = safecb(collection.count, collection)(cmd.query);
+      const totalQuery = safecb(collection.count, collection)(cmd.query));
 
       return Promise.all([
         resultsQuery,

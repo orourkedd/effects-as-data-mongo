@@ -1,7 +1,7 @@
 function mongoInsert(collection, doc) {
   return {
-    type: 'mongo',
-    fn: 'insert',
+    type: "mongo",
+    fn: "insert",
     collection,
     doc
   };
@@ -9,8 +9,8 @@ function mongoInsert(collection, doc) {
 
 function mongoUpsert(collection, doc, query) {
   return {
-    type: 'mongo',
-    fn: 'upsert',
+    type: "mongo",
+    fn: "upsert",
     collection,
     doc,
     query
@@ -19,28 +19,31 @@ function mongoUpsert(collection, doc, query) {
 
 function mongoFindOne(collection, query) {
   return {
-    type: 'mongo',
-    fn: 'findOne',
+    type: "mongo",
+    fn: "findOne",
     collection,
     query
   };
 }
 
 function mongoFind(collection, query, options = {}) {
+  options.limit = options.perPage || 25;
+  options.skip = (options.page || 0) * options.limit;
+  delete options.page;
+  delete options.perPage;
   return {
-    type: 'mongo',
-    fn: 'find',
+    type: "mongo",
+    fn: "find",
     collection,
     query,
-    page: options.page || 0,
-    limit: options.perPage || 25
+    options
   };
 }
 
 function mongoDropCollection(collection) {
   return {
-    type: 'mongo',
-    fn: 'dropCollection',
+    type: "mongo",
+    fn: "dropCollection",
     collection
   };
 }
